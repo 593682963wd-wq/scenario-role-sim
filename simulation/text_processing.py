@@ -4,12 +4,6 @@ import re
 from collections import Counter
 from pathlib import Path
 
-try:
-    import fitz  # type: ignore
-except Exception:  # pragma: no cover - optional dependency is checked at runtime
-    fitz = None
-
-
 SUPPORTED_EXTENSIONS = {".txt", ".md", ".markdown", ".pdf"}
 MAX_TEXT_CHARS = 180_000
 
@@ -129,14 +123,12 @@ def extract_text_from_file(path: Path) -> str:
     if suffix not in SUPPORTED_EXTENSIONS:
         raise ValueError("只支持 .txt / .md / .pdf 种子材料")
     if suffix == ".pdf":
-        if fitz is None:
-            raise ValueError("当前环境未安装 PyMuPDF，无法解析 PDF")
         try:
-            chunks: list[str] = []
-            with fitz.open(path) as doc:
-                for page in doc:
-                    chunks.append(page.get_text("text"))
-            text = "\n".join(chunks)
+            from pdfminer.high_level import extract_text
+        except ImportError as exc:
+            raise ValueError("请先安装 requirements-pdf.txt 中的可选 PDF 依赖") from exc
+        try:
+            text = extract_text(str(path))
         except Exception as exc:
             raise ValueError(f"PDF 解析失败：{exc}") from exc
     else:

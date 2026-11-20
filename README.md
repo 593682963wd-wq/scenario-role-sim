@@ -25,7 +25,7 @@ python3 -m venv .venv
 
 ## 可选本地PDF辅助函数
 
-默认CLI只接收JSON内的文本，不需要PDF库。直接调用 `simulation.text_processing.extract_text_from_file` 处理本地PDF时，先安装 `pip install -r requirements-pdf.txt`；仅提取文字层，不做OCR。该可选函数用合成PDF验证，未连接原项目材料。
+默认CLI只接收JSON内的文本，不需要PDF库。直接调用 `simulation.text_processing.extract_text_from_file` 处理本地PDF时，先安装 `pip install -r requirements-pdf.txt`，使用 MIT 许可的 pdfminer.six；仅提取文字层，不做OCR。该可选函数用合成PDF验证，未连接原项目材料。
 
 ## 2026-11-08 候选修订
 
